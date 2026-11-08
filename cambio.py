@@ -15,7 +15,8 @@ def buscar_cambio():
         return None
 
 
-rates = buscar_cambio()
-if rates is not None:
-    for moeda, valor in rates.items():
-        print(f"1 GBP = {valor} {moeda}")
+if __name__ == "__main__":
+    rates = buscar_cambio()
+    if rates is not None:
+        for moeda, valor in rates.items():
+            print(f"1 GBP = {valor} {moeda}")
