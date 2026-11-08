@@ -2,7 +2,7 @@ import requests
 
 URL = (
     "https://api.open-meteo.com/v1/forecast"
-    "?latitude=51.5072&longitude=-0.1276&current=temperature_2m"
+    "?latitude=51.3190&longitude=-0.5589&current=temperature_2m"
 )
 
 
@@ -21,4 +21,4 @@ def buscar_clima():
 if __name__ == "__main__":
     clima = buscar_clima()
     if clima is not None:
-        print(clima)
+        print(f"Temperatura atual em Woking: {clima['current']['temperature_2m']}°C")
