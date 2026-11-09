@@ -13,6 +13,14 @@ def criar_tabela():
             coletado_em TEXT NOT NULL
         )
     """)
+    cursor.execute("""
+        CREATE TABLE IF NOT EXISTS clima (
+            id INTEGER PRIMARY KEY AUTOINCREMENT,
+            temperatura REAL NOT NULL,
+            coletado_em TEXT NOT NULL
+        )
+    """)
+
     conexao.commit()
     conexao.close()
     print("Tabela criada")
@@ -31,12 +39,31 @@ def salvar_cambio(rates):
     conexao.close()
     print(f"{len(rates)} cotações salvas")
 
+
+def salvar_clima(clima):
+    conexao = sqlite3.connect("cambio.db")
+    cursor = conexao.cursor()
+    agora = datetime.now().isoformat(timespec="seconds")
+    temperatura = clima["current"]["temperature_2m"]
+    cursor.execute(
+        "INSERT INTO clima (temperatura, coletado_em) VALUES (?, ?)",
+        (temperatura, agora),
+    )
+    conexao.commit()
+    conexao.close()
+    print(f"Temperatura atual de {temperatura}°C salva")
+
+    
 if __name__ == "__main__":
     from cambio import buscar_cambio
+    from clima import buscar_clima
 
     criar_tabela()
+
     rates = buscar_cambio()
     if rates is not None:
         salvar_cambio(rates)
 
-
+    clima = buscar_clima()
+    if clima is not None:
+        salvar_clima(clima)
