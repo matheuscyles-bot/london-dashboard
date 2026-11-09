@@ -79,21 +79,3 @@ def salvar_metro(dados):
     print(f"{len(dados)} informações do metrô salvas")
 
 
-if __name__ == "__main__":
-    from cambio import buscar_cambio
-    from clima import buscar_clima
-    from metro import buscar_metro
-
-    criar_tabela()
-
-    rates = buscar_cambio()
-    if rates is not None:
-        salvar_cambio(rates)
-
-    clima = buscar_clima()
-    if clima is not None:
-        salvar_clima(clima)
-
-    dados_metro = buscar_metro()
-    if dados_metro is not None:
-        salvar_metro(dados_metro)
