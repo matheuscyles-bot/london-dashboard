@@ -21,9 +21,13 @@ else:
     st.metric("Temperatura atual", f"{df_clima['temperatura'][0]} °C")
 
 st.header("Câmbio (base GBP)")
-df_pivot = df_cambio.pivot(index="coletado_em", columns="moeda", values="valor")
-
-st.line_chart(df_pivot)
+if df_cambio.empty:
+    st.warning("Sem dados de câmbio. Rode run_pipeline.py.")
+else:
+    df_cambio = df_cambio.drop_duplicates(subset=["coletado_em", "moeda"])
+    df_pivot = df_cambio.pivot(index="coletado_em", columns="moeda", values="valor")
+    st.line_chart(df_pivot[["EUR", "USD"]])
+    st.line_chart(df_pivot[["BRL"]])
 
 st.header("Metrô de Londres")
 st.dataframe(df_metro)
