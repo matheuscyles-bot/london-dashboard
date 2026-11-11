@@ -20,5 +20,3 @@ if __name__ == "__main__":
     if rates is not None:
         for moeda, valor in rates.items():
             print(f"1 GBP = {valor} {moeda}")
-
-

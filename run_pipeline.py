@@ -1,7 +1,7 @@
 from cambio import buscar_cambio
 from clima import buscar_clima
-from metro import buscar_metro
 from database import criar_tabela, salvar_cambio, salvar_clima, salvar_metro
+from metro import buscar_metro
 
 
 def executar_pipeline():

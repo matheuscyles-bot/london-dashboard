@@ -11,7 +11,9 @@ def buscar_metro():
         print(f"Erro ao buscar metrô. Status code: {resposta.status_code}")
         return None
     except requests.exceptions.RequestException as erro:
-        print(f"Aviso: não foi possível buscar as informações do metrô. Detalhe: {erro}")
+        print(
+            f"Aviso: não foi possível buscar as informações do metrô. Detalhe: {erro}"
+        )
         return None
 
 

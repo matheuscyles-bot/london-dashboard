@@ -16,8 +16,6 @@ df_metro = pd.read_sql_query(
     conexao,
 )
 conexao.close()
-df_problemas = df_metro[df_metro["status"] != "Good Service"]
-
 st.header("Clima")
 if df_clima.empty:
     st.warning("Sem dados de clima. Rode run_pipeline.py.")
@@ -34,6 +32,14 @@ else:
     st.line_chart(df_pivot[["BRL"]])
 
 st.header("Metrô de Londres")
-st.dataframe(df_metro)
-st.header("Problemas no Metrô")
-st.write(df_problemas)
+if df_metro.empty:
+    st.warning("Sem dados do metrô. Rode run_pipeline.py.")
+else:
+    df_problemas = df_metro[df_metro["status"] != "Good Service"]
+    st.metric("Linhas com problema", len(df_problemas))
+    if df_problemas.empty:
+        st.success("Todas as linhas com serviço normal")
+    else:
+        st.dataframe(df_problemas)
+    with st.expander("Ver todas as linhas"):
+        st.dataframe(df_metro)

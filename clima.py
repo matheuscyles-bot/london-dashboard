@@ -6,15 +6,17 @@ URL = (
     "&current=temperature_2m,precipitation"
     "&hourly=precipitation_probability&forecast_hours=6"
 )
+
+
 def buscar_clima():
     try:
         resposta = requests.get(URL, timeout=10)
         if resposta.status_code == 200:
             dados = resposta.json()
             return {
-                    "temperatura": dados["current"]["temperature_2m"],
-                    "precipitacao": dados["current"]["precipitation"],
-                     "chance_chuva": max(dados["hourly"]["precipitation_probability"]),
+                "temperatura": dados["current"]["temperature_2m"],
+                "precipitacao": dados["current"]["precipitation"],
+                "chance_chuva": max(dados["hourly"]["precipitation_probability"]),
             }
         print(f"Erro ao buscar clima. Status code: {resposta.status_code}")
         return None

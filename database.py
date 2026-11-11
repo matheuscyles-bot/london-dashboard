@@ -31,7 +31,6 @@ def criar_tabela():
         )
     """)
 
-
     conexao.commit()
     conexao.close()
     print("Tabela criada")
@@ -78,5 +77,3 @@ def salvar_metro(dados):
     conexao.commit()
     conexao.close()
     print(f"{len(dados)} informações do metrô salvas")
-
-
