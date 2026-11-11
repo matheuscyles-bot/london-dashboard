@@ -17,6 +17,8 @@ def criar_tabela():
         CREATE TABLE IF NOT EXISTS clima (
             id INTEGER PRIMARY KEY AUTOINCREMENT,
             temperatura REAL NOT NULL,
+            precipitacao REAL NOT NULL,
+            chance_chuva INTEGER NOT NULL,
             coletado_em TEXT NOT NULL
         )
     """)
@@ -53,14 +55,13 @@ def salvar_clima(clima):
     conexao = sqlite3.connect("cambio.db")
     cursor = conexao.cursor()
     agora = datetime.now().isoformat(timespec="seconds")
-    temperatura = clima["current"]["temperature_2m"]
     cursor.execute(
-        "INSERT INTO clima (temperatura, coletado_em) VALUES (?, ?)",
-        (temperatura, agora),
+        "INSERT INTO clima (temperatura, precipitacao, chance_chuva, coletado_em) VALUES (?, ?, ?, ?)",
+        (clima["temperatura"], clima["precipitacao"], clima["chance_chuva"], agora),
     )
     conexao.commit()
     conexao.close()
-    print(f"Temperatura atual de {temperatura}°C salva")
+    print(f"Temperatura atual de {clima['temperatura']}°C salva")
 
 
 def salvar_metro(dados):
