@@ -31,6 +31,7 @@ def criar_tabela():
         )
     """)
 
+
     conexao.commit()
     conexao.close()
     print("Tabela criada")

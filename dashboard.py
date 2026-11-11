@@ -16,6 +16,7 @@ df_metro = pd.read_sql_query(
     conexao,
 )
 conexao.close()
+
 st.header("Clima")
 if df_clima.empty:
     st.warning("Sem dados de clima. Rode run_pipeline.py.")
