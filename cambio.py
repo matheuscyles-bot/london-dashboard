@@ -41,4 +41,4 @@ if __name__ == "__main__":
     historico = buscar_historico_brl()
     print(historico)
 
-    print("fim do script")
+    
