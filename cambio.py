@@ -39,6 +39,24 @@ if __name__ == "__main__":
             print(f"1 GBP = {valor} {moeda}")
 
     historico = buscar_historico_brl()
-    print(historico)
 
-    
+
+def resumo_brl():
+    rates = buscar_cambio()
+    historico = buscar_historico_brl()
+    if rates is None or historico is None:
+        return None
+    valores = [dia["BRL"] for dia in historico.values()]
+    media = sum(valores) / len(valores)
+    hoje = rates["BRL"]
+    variacao = (hoje - media) / media * 100
+    return {"hoje": hoje, "media": media, "variacao": variacao}
+
+
+if __name__ == "__main__":
+    resumo = resumo_brl()
+    if resumo is not None:
+        print(
+            f"BRL hoje: {resumo['hoje']} | média 30 dias: "
+            f"{resumo['media']:.2f} | {resumo['variacao']:+.1f}%"
+        )
