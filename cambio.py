@@ -1,5 +1,4 @@
 import requests
-
 from datetime import date, timedelta
 
 URL = "https://api.frankfurter.dev/v1/latest?base=GBP&symbols=BRL,EUR,USD"
@@ -25,20 +24,13 @@ def buscar_historico_brl():
         resposta = requests.get(url, timeout=10)
         if resposta.status_code == 200:
             return resposta.json()["rates"]
-        print(f"Erro ao buscar histórico do câmbio. Status code: {resposta.status_code}")
+        print(
+            f"Erro ao buscar histórico do câmbio. Status code: {resposta.status_code}"
+        )
         return None
     except requests.exceptions.RequestException:
         print("Aviso: não foi possível buscar o histórico das taxas de câmbio.")
         return None
-
-
-if __name__ == "__main__":
-    rates = buscar_cambio()
-    if rates is not None:
-        for moeda, valor in rates.items():
-            print(f"1 GBP = {valor} {moeda}")
-
-    historico = buscar_historico_brl()
 
 
 def resumo_brl():
@@ -54,6 +46,11 @@ def resumo_brl():
 
 
 if __name__ == "__main__":
+    rates = buscar_cambio()
+    if rates is not None:
+        for moeda, valor in rates.items():
+            print(f"1 GBP = {valor} {moeda}")
+
     resumo = resumo_brl()
     if resumo is not None:
         print(
