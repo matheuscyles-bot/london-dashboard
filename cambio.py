@@ -1,5 +1,6 @@
-import requests
 from datetime import date, timedelta
+
+import requests
 
 URL = "https://api.frankfurter.dev/v1/latest?base=GBP&symbols=BRL,EUR,USD"
 
