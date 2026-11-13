@@ -2,6 +2,7 @@ import sqlite3
 
 import pandas as pd
 import streamlit as st
+from cambio import resumo_brl
 
 st.title("London Daily Dashboard")
 
@@ -24,13 +25,16 @@ else:
     st.metric("Temperatura atual", f"{df_clima['temperatura'][0]} °C")
 
 st.header("Câmbio (base GBP)")
-if df_cambio.empty:
-    st.warning("Sem dados de câmbio. Rode run_pipeline.py.")
+resumo = resumo_brl()
+resumo = resumo_brl()
+if resumo is None:
+    st.warning("Não foi possível calcular o resumo do BRL.")
 else:
-    df_cambio = df_cambio.drop_duplicates(subset=["coletado_em", "moeda"])
-    df_pivot = df_cambio.pivot(index="coletado_em", columns="moeda", values="valor")
-    st.line_chart(df_pivot[["EUR", "USD"]])
-    st.line_chart(df_pivot[["BRL"]])
+    st.metric(
+        "GBP→BRL hoje",
+        f"{resumo['hoje']}",
+        f"{resumo['variacao']:+.1f}% vs média de 30 dias",
+    )
 
 st.header("Metrô de Londres")
 if df_metro.empty:
