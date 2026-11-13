@@ -30,8 +30,6 @@ def criar_tabela():
             coletado_em TEXT NOT NULL
         )
     """)
-
-
     conexao.commit()
     conexao.close()
     print("Tabela criada")
@@ -56,7 +54,8 @@ def salvar_clima(clima):
     cursor = conexao.cursor()
     agora = datetime.now().isoformat(timespec="seconds")
     cursor.execute(
-        "INSERT INTO clima (temperatura, precipitacao, chance_chuva, coletado_em) VALUES (?, ?, ?, ?)",
+        "INSERT INTO clima (temperatura, precipitacao, chance_chuva, coletado_em) "
+        "VALUES (?, ?, ?, ?)",
         (clima["temperatura"], clima["precipitacao"], clima["chance_chuva"], agora),
     )
     conexao.commit()
@@ -68,12 +67,10 @@ def salvar_metro(dados):
     conexao = sqlite3.connect("cambio.db")
     cursor = conexao.cursor()
     agora = datetime.now().isoformat(timespec="seconds")
-    for linha in dados:
-        nome = linha["name"]
-        status = linha["lineStatuses"][0]["statusSeverityDescription"]
+    for item in dados:
         cursor.execute(
             "INSERT INTO metro (linha, status, coletado_em) VALUES (?, ?, ?)",
-            (nome, status, agora),
+            (item["linha"], item["status"], agora),
         )
     conexao.commit()
     conexao.close()
