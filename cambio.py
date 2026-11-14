@@ -17,44 +17,44 @@ def buscar_cambio():
         return None
 
 
-def buscar_historico_brl():
+def buscar_historico(dias=30, moedas="BRL,EUR,USD"):
     fim = date.today()
-    inicio = fim - timedelta(days=30)
-    url = f"https://api.frankfurter.dev/v1/{inicio.isoformat()}..{fim.isoformat()}?base=GBP&symbols=BRL"
+    inicio = fim - timedelta(days=dias)
+    url = (
+        f"https://api.frankfurter.dev/v1/{inicio.isoformat()}..{fim.isoformat()}"
+        f"?base=GBP&symbols={moedas}"
+    )
     try:
         resposta = requests.get(url, timeout=10)
         if resposta.status_code == 200:
             return resposta.json()["rates"]
-        print(
-            f"Erro ao buscar histórico do câmbio. Status code: {resposta.status_code}"
-        )
+        print(f"Erro ao buscar histórico. Status code: {resposta.status_code}")
         return None
     except requests.exceptions.RequestException:
-        print("Aviso: não foi possível buscar o histórico das taxas de câmbio.")
+        print("Aviso: não foi possível buscar o histórico do câmbio.")
         return None
 
 
-def resumo_brl():
-    rates = buscar_cambio()
-    historico = buscar_historico_brl()
-    if rates is None or historico is None:
-        return None
-    valores = [dia["BRL"] for dia in historico.values()]
-    media = sum(valores) / len(valores)
-    hoje = rates["BRL"]
-    variacao = (hoje - media) / media * 100
-    return {"hoje": hoje, "media": media, "variacao": variacao}
+def calcular_resumos(rates, historico):
+    resumos = {}
+    for moeda, hoje in rates.items():
+        valores = [dia[moeda] for dia in historico.values()]
+        media = sum(valores) / len(valores)
+        resumos[moeda] = {
+            "hoje": hoje,
+            "media": media,
+            "variacao": (hoje - media) / media * 100,
+        }
+    return resumos
 
 
 if __name__ == "__main__":
     rates = buscar_cambio()
-    if rates is not None:
-        for moeda, valor in rates.items():
-            print(f"1 GBP = {valor} {moeda}")
-
-    resumo = resumo_brl()
-    if resumo is not None:
-        print(
-            f"BRL hoje: {resumo['hoje']} | média 30 dias: "
-            f"{resumo['media']:.2f} | {resumo['variacao']:+.1f}%"
-        )
+    historico = buscar_historico(30)
+    if rates is not None and historico is not None:
+        for moeda, r in calcular_resumos(rates, historico).items():
+            print(
+                f"{moeda} hoje: {r['hoje']} | média: {r['media']:.4f} "
+                f"| {r['variacao']:+.1f}%"
+            )
+        print(f"Pontos em 365 dias: {len(buscar_historico(365))}")
