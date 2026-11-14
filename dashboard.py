@@ -13,11 +13,6 @@ df_clima = pd.read_sql_query(
     "FROM clima ORDER BY id DESC LIMIT 1",
     conexao,
 )
-df_clima = pd.read_sql_query(
-    "SELECT temperatura, precipitacao, chance_chuva, coletado_em "
-    "FROM clima ORDER BY id DESC LIMIT 1",
-    conexao,
-)
 df_metro = pd.read_sql_query(
     "SELECT * FROM metro WHERE coletado_em = (SELECT MAX(coletado_em) FROM metro)",
     conexao,
@@ -38,7 +33,7 @@ def carregar_cambio(dias):
     return buscar_cambio(), buscar_historico(dias)
 
 
-st.header("Câmbio (base GBP)")
+st.header("Câmbio (GBP)")
 periodo = st.radio("Período", ["30 dias", "6 meses", "1 ano"], horizontal=True)
 dias = {"30 dias": 30, "6 meses": 182, "1 ano": 365}[periodo]
 
@@ -56,8 +51,22 @@ else:
         )
 
     df_hist = pd.DataFrame.from_dict(historico, orient="index")
-    st.line_chart(df_hist[["EUR", "USD"]])
-    st.line_chart(df_hist[["BRL"]])
+    import altair as alt
+
+def grafico(df, colunas):
+    dados = df[colunas].reset_index(names="data").melt("data", var_name="moeda", value_name="valor")
+    return (
+        alt.Chart(dados)
+        .mark_line()
+        .encode(
+            x="data:T",
+            y=alt.Y("valor:Q", scale=alt.Scale(zero=False)),
+            color="moeda:N",
+        )
+    )
+
+st.altair_chart(grafico(df_hist, ["EUR", "USD"]), use_container_width=True)
+st.altair_chart(grafico(df_hist, ["BRL"]), use_container_width=True)
 
 
 st.header("Metrô de Londres")
