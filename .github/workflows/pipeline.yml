@@ -29,6 +29,7 @@ jobs:
       - run: |
           git config user.name "pipeline-bot"
           git config user.email "bot@users.noreply.github.com"
+          git reset -q
           git add cambio.db
           git commit -m "Atualiza dados" || exit 0
           git push
