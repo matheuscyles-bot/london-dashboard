@@ -1,3 +1,5 @@
+# FUNCAO: CRIAR BANCO DE DADOS SQLITE E SALVAR DADOS DAS APIS
+
 import sqlite3
 from datetime import datetime
 

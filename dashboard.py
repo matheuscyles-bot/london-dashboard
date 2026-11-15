@@ -1,5 +1,6 @@
 import sqlite3
 
+import altair as alt
 import pandas as pd
 import streamlit as st
 
@@ -51,10 +52,14 @@ else:
         )
 
     df_hist = pd.DataFrame.from_dict(historico, orient="index")
-    import altair as alt
+
 
 def grafico(df, colunas):
-    dados = df[colunas].reset_index(names="data").melt("data", var_name="moeda", value_name="valor")
+    dados = (
+        df[colunas]
+        .reset_index(names="data")
+        .melt("data", var_name="moeda", value_name="valor")
+    )
     return (
         alt.Chart(dados)
         .mark_line()
@@ -64,6 +69,7 @@ def grafico(df, colunas):
             color="moeda:N",
         )
     )
+
 
 st.altair_chart(grafico(df_hist, ["EUR", "USD"]), use_container_width=True)
 st.altair_chart(grafico(df_hist, ["BRL"]), use_container_width=True)
@@ -81,3 +87,5 @@ else:
         st.dataframe(df_problemas)
     with st.expander("Ver todas as linhas"):
         st.dataframe(df_metro)
+
+# RODAR: streamlit run dashboard.py

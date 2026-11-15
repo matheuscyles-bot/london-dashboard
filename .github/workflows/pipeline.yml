@@ -1,0 +1,34 @@
+name: Pipeline
+
+on:
+  schedule:
+    - cron: "0 */3 * * *"
+  workflow_dispatch:
+
+permissions:
+  contents: write
+
+jobs:
+  coleta:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+        with:
+          ref: data
+
+      - uses: actions/setup-python@v5
+        with:
+          python-version: "3.12"
+
+      - run: pip install requests
+
+      - run: |
+          git checkout origin/main -- run_pipeline.py cambio.py clima.py metro.py database.py
+          python run_pipeline.py
+
+      - run: |
+          git config user.name "pipeline-bot"
+          git config user.email "bot@users.noreply.github.com"
+          git add cambio.db
+          git commit -m "Atualiza dados" || exit 0
+          git push
