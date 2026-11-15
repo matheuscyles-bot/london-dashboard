@@ -23,6 +23,7 @@ jobs:
       - run: pip install requests
 
       - run: |
+          git fetch origin main
           git checkout origin/main -- run_pipeline.py cambio.py clima.py metro.py database.py
           python run_pipeline.py
 
