@@ -92,9 +92,8 @@ def grafico(df, colunas):
     )
 
 
-st.altair_chart(grafico(df_hist, ["EUR", "USD"]), use_container_width=True)
-st.altair_chart(grafico(df_hist, ["BRL"]), use_container_width=True)
-
+st.altair_chart(grafico(df_hist, ["EUR", "USD"]), width="stretch")
+st.altair_chart(grafico(df_hist, ["BRL"]), width="stretch")
 
 st.header("Metrô de Londres")
 if df_metro.empty:

@@ -78,4 +78,5 @@ def salvar_metro(dados):
     conexao.close()
     print(f"{len(dados)} informações do metrô salvas")
 
+
 ## RODAR: python3 database.py

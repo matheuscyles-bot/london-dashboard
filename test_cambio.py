@@ -60,6 +60,5 @@ def test_duas_moedas_independentes():
 
 def test_historico_vazio_nao_quebra():
     resumos = calcular_resumos({"BRL": 7.5}, {})
-    
 
     assert "BRL" not in resumos
