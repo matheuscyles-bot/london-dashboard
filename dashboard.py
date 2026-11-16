@@ -1,14 +1,35 @@
 import sqlite3
 
-import altair as alt 
+import altair as alt
 import pandas as pd
+import requests
 import streamlit as st
 
 from cambio import buscar_cambio, buscar_historico, calcular_resumos
 
+URL_BANCO = (
+    "https://raw.githubusercontent.com/matheuscyles-bot/london-dashboard/data/cambio.db"
+)
+BANCO_REMOTO = "cambio_remoto.db"
+BANCO_LOCAL = "cambio.db"
+
+
+@st.cache_data(ttl=600)
+def obter_banco():
+    try:
+        resposta = requests.get(URL_BANCO, timeout=15)
+        resposta.raise_for_status()
+        with open(BANCO_REMOTO, "wb") as arquivo:
+            arquivo.write(resposta.content)
+        return BANCO_REMOTO
+    except requests.exceptions.RequestException as erro:
+        print(f"Aviso: não foi possível baixar o banco remoto. Detalhe: {erro}")
+        return BANCO_LOCAL
+
+
 st.title("London Daily Dashboard")
 
-conexao = sqlite3.connect("cambio.db")
+conexao = sqlite3.connect(obter_banco())
 df_clima = pd.read_sql_query(
     "SELECT temperatura, precipitacao, chance_chuva, coletado_em "
     "FROM clima ORDER BY id DESC LIMIT 1",
