@@ -1,6 +1,6 @@
 import sqlite3
 
-import altair as alt
+import altair as alt 
 import pandas as pd
 import streamlit as st
 
