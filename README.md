@@ -1,6 +1,6 @@
 # London Daily Dashboard
 
-An automated data pipeline and dashboard that collects public data about London (exchange rates, weather and Tube status) every few hours, stores it in SQLite and presents it in a Streamlit app.
+An automated data pipeline and dashboard that collects public data about London (exchange rates, weather and Tube status) scheduled hourly (GitHub may delay or skip runs, so the effective interval varies), stores it in SQLite and presents it in a Streamlit app.
 
 **Live demo:** [https://london-dashboard-gxfawvqlj2iyd536fxmtea.streamlit.app/](https://london-dashboard-gxfawvqlj2iyd536fxmtea.streamlit.app/)
 
@@ -17,7 +17,7 @@ An automated data pipeline and dashboard that collects public data about London 
 ## How it works
 
 ```
-GitHub Actions (every 3 hours)
+scheduled hourly (GitHub may delay or skip runs, so the effective interval varies)
         |
         v
 collectors (cambio.py, clima.py, metro.py)
